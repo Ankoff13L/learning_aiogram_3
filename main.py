@@ -3,9 +3,14 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import Message  
 # 10- импортируем модуль asyncio
 import asyncio
+# 00- импортируем load_dotenv() из модуля `dotenv` и импортируем модуль `os` для получения значения токена
+from dotenv import load_dotenv
+import os
 
-# 1- создадим переменную token, в которую поместим tokem бота
-token = '7966550454:AAErfUdzk2_808sVzNlpD6I3mVrEtSrXOjw'
+# 1.1- Загружаем переменные для токена из .env
+load_dotenv()
+# 1.2- Получаем токен из переменных окружения
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 """
 11- асинхронная функция для обработки нажатия пользователем на кнопку /start
@@ -15,7 +20,8 @@ async def get_start(message: Message, bot: Bot):
     # 14- приветсвуем пользователя сообщением. Для этого получаем его чат-id из объекта message 
     await bot.send_message(message.from_user.id, f'Привет {message.from_user.first_name}. Рад тебя видеть!')
     await message.answer(f'Привет {message.from_user.first_name}. Рад тебя видеть!') # 15
-    await message.reply(f'Привет {message.from_user.first_name}. Рад тебя видеть!') # 16- с помощью метода .reply() мы будем цитировать сообщения пользователя
+    await message.reply(f'Привет {message.from_user.first_name}. Рад тебя видеть!') # 16- с помощью метода .reply() мы 
+                                                                              # будем цитировать сообщения пользователя
 
 """
 git
@@ -23,10 +29,9 @@ git
 """
 async def start():
     # 2- создадим объект класса Bot и передадим в него аргументом token от бота
-    bot = Bot(token=token)
+    bot = Bot(token=TOKEN)
 
-    # 3- создадим объект класса 
-    # 3- Dispather - это объект, который занимается получением update
+    # 3- создадим объект класса Dispather - это объект, который занимается получением update
     dp = Dispatcher()
 
     # 4- чтобы получить update запустим polling > dp.start_polling()
