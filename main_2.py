@@ -1,17 +1,16 @@
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message  
 import asyncio
-from dotenv import load_dotenv
-import os
+from dotenv import load_dotenv, find_dotenv
+from os import getenv
 
-load_dotenv()
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-
+load_dotenv(find_dotenv())
+TOKEN = getenv("BOT_TOKEN")
 
 """
 11- асинхронная функция для обработки нажатия пользователем на кнопку /start
 """
-async def get_start(message: Message, bot: Bot):
+async def get_start(message:Message, bot:Bot):
     await bot.send_message(message.from_user.id, f'Привет {message.from_user.first_name}. Рад тебя видеть!')
     await message.answer(f'Привет {message.from_user.first_name}. Рад тебя видеть!') 
     await message.reply(f'Привет {message.from_user.first_name}. Рад тебя видеть!') 

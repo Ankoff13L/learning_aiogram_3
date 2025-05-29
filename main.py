@@ -4,14 +4,13 @@ from aiogram.types import Message
 # 10- импортируем модуль asyncio
 import asyncio
 # 00- импортируем load_dotenv() из модуля `dotenv` и импортируем модуль `os` для получения значения токена
-from dotenv import load_dotenv
-import os
+from dotenv import load_dotenv, find_dotenv
+from os import getenv
 
 # 1.1- Загружаем переменные для токена из .env
-load_dotenv()
+load_dotenv(find_dotenv())
 # 1.2- Получаем токен из переменных окружения
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-
+TOKEN = getenv("BOT_TOKEN")
 """
 11- асинхронная функция для обработки нажатия пользователем на кнопку /start
 """
