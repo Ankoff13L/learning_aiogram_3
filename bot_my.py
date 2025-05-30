@@ -17,12 +17,12 @@ TOKEN = getenv("BOT_TOKEN")
 dp = Dispatcher()
 
 
-# Command handler
+# Хэндлер на команду /start
 @dp.message(Command("start"))
 async def command_start_handler(message: Message) -> None:
     await message.answer("Привет! Я бот, созданный с помощью aiogram.")
 
-# Run the bot
+# Запуск бота и запусе процесса поллинга новых апдейтов
 async def main() -> None:
     bot = Bot(token=TOKEN)
     await dp.start_polling(bot)
