@@ -1,3 +1,4 @@
+#################################################################################################
 # # библиотеки для токена
 # from dotenv import load_dotenv, find_dotenv
 # from os import getenv
@@ -33,7 +34,7 @@
 # if __name__ == "__main__":
 #     asyncio.run(main())
 
-
+#################################################################################################
 # Пример форматирования вводимого текса с помощью aiogram.utils.formating
 
 # from dotenv import load_dotenv, find_dotenv
@@ -88,8 +89,7 @@
 # if __name__ == "__main__":
 #       asyncio.run(dp.start_polling(bot))
 
-
-
+#################################################################################################
 # # Пример обработчика с навешеным декоратором  
 # # Хэндлер на команду /test1 
 # @dp.message(Command("test1"))
@@ -143,8 +143,48 @@
 #     asyncio.run(main()) # Запускаем асинхронную функцию main()
 
 
-# ##################################################################################################
-# Cинтаксис обработчика команды `/help` с роутером:
+# # ##################################################################################################
+# # Cинтаксис обработчика команды `/help` с роутером:
+# # библиотеки для токена
+# from dotenv import load_dotenv, find_dotenv
+# from os import getenv
+# # библиотеки для aiogram
+# import asyncio
+# import logging
+# from aiogram import Bot, Dispatcher, types, Router
+# from aiogram.filters.command import Command
+
+# # Добавляем значение токена в проект
+# load_dotenv(find_dotenv())
+# TOKEN = getenv("BOT_TOKEN")
+
+# # Включаем логирование, чтобы не пропустить важные сообщения
+# logging.basicConfig(level=logging.INFO)
+
+# bot = Bot(token=TOKEN) # Создаём объект бот
+# dp = Dispatcher() # Создаём диспетчер	 
+
+# router = Router()  # Создаем роутер
+# dp.include_router(router) # Подключаем наш роутер с командами к диспетчеру
+
+# # Обработчик команды /help
+# @router.message(Command("help"))  # Ловим сообщения ТОЛЬКО с командой /help
+# async def cmd_help(message: types.Message):
+#     help_text = "Вот что я умею:\n"
+#     help_text += "/start - Начать работу с ботом\n"
+#     help_text += "/help - Получить справку\n"
+#     help_text += "/menu - Показать меню действий"
+#     await message.answer(help_text)
+    
+# # Запуск процесса поллинга новых апдейтов
+# async def main():
+#     await dp.start_polling(bot)
+
+# if __name__ == "__main__":
+#     asyncio.run(main()) # Запускаем асинхронную функцию main()
+
+#################################################################################################
+# Пример с одним роутером и тремя обработчиками
 # библиотеки для токена
 from dotenv import load_dotenv, find_dotenv
 from os import getenv
@@ -152,7 +192,7 @@ from os import getenv
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher, types, Router
-from aiogram.filters.command import Command
+from aiogram.filters.command import Command,CommandStart
 
 # Добавляем значение токена в проект
 load_dotenv(find_dotenv())
@@ -164,17 +204,28 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=TOKEN) # Создаём объект бот
 dp = Dispatcher() # Создаём диспетчер	 
 
-router = Router()  # Создаем роутер
-dp.include_router(router) # Подключаем наш роутер с командами к диспетчеру
+commands_router = Router()  # Создаем роутер
+dp.include_router(commands_router) # Подключаем наш роутер с командами к диспетчеру
+
+# Обработчик команды /start
+@commands_router.message(CommandStart())  # Ловим сообщения ТОЛЬКО с командой /start
+async def cmd_start(message: types.Message):
+    await message.answer("Привет! 👋 Я твой новый бот. Рад знакомству!")
+
 
 # Обработчик команды /help
-@router.message(Command("help"))  # Ловим сообщения ТОЛЬКО с командой /help
+@commands_router.message(Command("help"))  # Ловим сообщения ТОЛЬКО с командой /help
 async def cmd_help(message: types.Message):
     help_text = "Вот что я умею:\n"
     help_text += "/start - Начать работу с ботом\n"
     help_text += "/help - Получить справку\n"
     help_text += "/menu - Показать меню действий"
     await message.answer(help_text)
+
+# Обработчик команды /menu
+@commands_router.message(Command("menu"))
+async def cmd_menu(message: types.Message):
+    await message.answer("Главное меню:")
     
 # Запуск процесса поллинга новых апдейтов
 async def main():
